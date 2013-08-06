@@ -1,9 +1,24 @@
 import json
 from datetime import datetime
-import pyes
+import pyes, pprint
 
+def ementa():
+	print 'Getting ementas...'
+	ementa_raw = open('../raw/projetos.txt', 'r')
+
+	ementas = {}
+	for a in ementa_raw.readlines()[2:]:
+		try:
+			b = a.split('#')
+			if len(a.split('#')) == 7:
+				pl = b[0] + '-' + b[1] + '-' + ''.join(b[2].split('/'))
+			ementas[pl] = b[3].decode("iso-8859-1").strip()	
+		except:
+			print "error on " + pl
+	return ementas
 
 def encerra():
+	print 'Getting encerramentos...'
 	encerra_raw = open('../raw/encerra.txt', 'r')
 
 	encerramentos = {}
@@ -17,7 +32,8 @@ def encerra():
 			print "error on " + pl
 	return encerramentos
 
-def projeta(encerramentos):
+def projeta(encerramentos, ementas):
+	print 'Getting tramitacoes...'
 	arquivo = open('../raw/tramita.txt', 'r')
 	projetos = {}
 	for a in arquivo.readlines()[2:]:
@@ -40,6 +56,8 @@ def projeta(encerramentos):
 				projetos[pl]['tramite'] = [tramite]
 				if encerramentos.has_key(pl):
 					projetos[pl]['encerramento'] = encerramentos[pl]
+				if ementas.has_key(pl):
+					projetos[pl]['ementa'] = ementas[pl]
 	return projetos
 
 def write_json(arquivo, projetos):
@@ -76,6 +94,16 @@ def upa_neguim(projetos):
 			erros = erros + 1
 	print erros
 
+def sample(dicionario, qtd=10):
+	i = 0;
+	for item in dicionario:
+		if i < qtd:
+			pprint.pprint(dicionario[item])
+			i = i + 1
+		else:
+			break
+
+ementas = ementa()
 encerramentos = encerra()
-projetos = projeta(encerramentos)
+projetos = projeta(encerramentos, ementas)
 upa_neguim(projetos)
