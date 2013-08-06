@@ -33,11 +33,13 @@ $(document).ready(function () {
 
 	$("#buscar button").click(function (e) {
 		e.preventDefault();
-		var prefix = $("#buscar input").val();
+		var search = $("#buscar input").val();
 		var q = {
 			"query" : {
-				"prefix" : { 
-					"_id" : prefix
+				"query_string" : { 
+					"query" : search,
+					"fields" : ["ementa", "encerramento", "_id"],
+					"default_operator" : "AND"
 				},
 			"size":10
 			}
