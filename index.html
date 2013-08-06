@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+  
+	<head>
+        <title>Linha do Tempo!</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+        <script src="vendor/jquery.min.js"></script>
+        <script src="vendor/tempo.min.js"></script>
+        <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    	<script src="js/helper.js"></script>
+ 		<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+ 		<link href="vendor/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+    
+    	<script src="js/main.js"></script>
+    	<link href="css/main.css" rel="stylesheet">
+
+    </head>
+    <body>
+    	
+  	<div class="header navbar navbar-inverse">
+  		<div class="navbar-inner">
+		    <div class="container">
+		    <ul class="nav">
+	            <li class="active">
+	            	<a href="./index.html">Home</a>
+	            </li>
+	            <li class="">
+	            	<a href="#">Ziriguidum!</a>
+	            </li>
+		    </ul>
+		    </div>
+		</div>
+	</div>
+
+	<div class="main">
+		<div class="container">
+			<h1>Linha do Tempo das Proposições</h1>
+			<form id="buscar" class="form-search">
+                <input type="text" class="input-xxlarge search-query" placeholder="PL, PDL, etc">
+                <button class="btn btn-primary" type="submit">Buscar</button>
+            </form>
+		<div id="tempo" style="display:none;">
+			<div id="{{id}}" class="projeto" data-template>
+				<h2>{{id}} - {{encerramento}}</h2>
+				<div class="timeline"></div>
+			</div>
+		</div>
+		</div>
+	</div>
+
+  	<div class="footer navbar navbar-fixed-bottom">
+		<p>Meu pé, meu querido pé, que me aguenta o dia inteiro. (CC-BY)</p>
+	</div>
+    </body>
+</html>
