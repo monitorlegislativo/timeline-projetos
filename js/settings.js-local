@@ -1,1 +1,2 @@
-SERVER = "http://127.0.0.1:9200/"
+SETTINGS = {}
+SETTINGS['SERVER'] = "http://127.0.0.1:9200/"

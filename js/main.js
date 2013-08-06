@@ -9,7 +9,7 @@ var timeline = function(pl, data) {
 	}
 
 var render = function(q) {
-	var query = 'http://127.0.0.1:9200/monitor/_search?source=' + JSON.stringify(q)
+	var query = SERVER + 'monitor/_search?source=' + JSON.stringify(q)
 	$.getJSON(query, function (data) {
 	    r.clear();
 	    $.each(data.hits.hits, function (index, t) {
