@@ -3,7 +3,7 @@ var timeline = function(pl, data) {
 	  $.each(data, function(index, tramite) {
 	  	var tempo = tramite['tempo'];
 	  	for (var i=0;i<tempo;i++) {
-	  		$("#"+pl+ " .timeline").append("<div class='dia "+tramite['unidade']+"'' title='"+tramite['unidade']+"'></div>");
+	  		$("#"+pl+ " .timeline").append("<div class='dia "+tramite['unidade']+"'' title='"+tramite['unidade']+" - "+ tempo +" dias'></div>");
 	  	}
 	  });
 	}
