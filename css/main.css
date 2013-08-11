@@ -29,6 +29,10 @@
 	border:1px solid #ccc;
 }
 
+.ADM {
+	border:1px solid #333;
+}
+
 .JUST {
 	border:1px solid #f00;
 }
@@ -49,6 +53,15 @@
     border:1px solid purple;   
 }
 
+.SAUDE {
+	border:1px solid blue;
+}
 .projeto {
     clear:both;
+}
+
+#paginate {
+	clear:both;
+	text-align: center;
+	margin-bottom:30px;
 }
