@@ -32,7 +32,21 @@ def encerra():
 			print "error on " + pl
 	return encerramentos
 
-def projeta(encerramentos, ementas):
+def arquivo_bruto():
+	print 'Getting brutos...'
+	bruto_raw = open('../raw/prolegt.txt', 'r')
+	brutos = {}
+	for a in bruto_raw.readlines()[2:]:
+		try:
+			b = a.split('#')
+			if len(a.split('#')) == 4:
+				pl = b[0].upper() + '-' + b[1] + '-' + b[2]
+			brutos[pl] = b[3].strip()	
+		except:
+			print "error on " + pl
+	return brutos
+
+def projeta(encerramentos, ementas, brutos):
 	print 'Getting tramitacoes...'
 	arquivo = open('../raw/tramita.txt', 'r')
 	projetos = {}
@@ -53,7 +67,12 @@ def projeta(encerramentos, ementas):
 				projetos[pl]['tramite'].append(tramite)
 			else:
 				projetos[pl] = { 'id' : pl }
+				projetos[pl]['tipo'] = b[0]
+				projetos[pl]['numero'] = b[1]
+				projetos[pl]['ano'] = b[2].split('/')[2]
 				projetos[pl]['tramite'] = [tramite]
+				if brutos.has_key(projetos[pl]['tipo'] + '-' + projetos[pl]['numero'] + '-' + projetos[pl]['ano']):
+					projetos[pl]['raw'] = brutos[projetos[pl]['tipo'] + '-' + projetos[pl]['numero'] + '-' + projetos[pl]['ano']]
 				if encerramentos.has_key(pl):
 					projetos[pl]['encerramento'] = encerramentos[pl]
 				if ementas.has_key(pl):
@@ -75,7 +94,7 @@ def upa_neguim(projetos):
 		pass
 
 	mapping = {
-		"data_fim" : { "type" : "string", "analyzer" : "keyword" },
+		"data_fim" : { "type" : "date", "format" : "dd/MM/YYYY" },
 		"data_ini" : { "type" : "date", "format" : "dd/MM/YYYY" }
     	}
 
@@ -105,5 +124,7 @@ def sample(dicionario, qtd=10):
 
 ementas = ementa()
 encerramentos = encerra()
-projetos = projeta(encerramentos, ementas)
-upa_neguim(projetos)
+brutos = arquivo_bruto()
+projetos = projeta(encerramentos, ementas, brutos)
+
+#upa_neguim(projetos)
