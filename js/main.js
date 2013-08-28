@@ -1,7 +1,7 @@
 //var my = new ES('http://127.0.0.1:9200', '');
 var q = {}
 
-var cargos = function(d) {
+var cargos = function(d, comissao) {
 	var lq = {
       "query" : {
       	"nested" : {
@@ -24,14 +24,24 @@ var cargos = function(d) {
 		    	}
 		    }
 	    },
-        "size":10,
+        "size":100,
         "from":0,
     }
     var query = SETTINGS['SERVER'] + 'vereadores/_search?source=' + JSON.stringify(lq);
     
     $.getJSON(query, function (data) {
     	$.each(data.hits.hits, function (index, t) {
-	        	console.log(t['_source'].nome_parlamentar);
+    			$.each(t['_source'].comissoes, function (index, com) {
+    				if (com.n == SETTINGS['MAPPING'][comissao]) {
+    					var start = moment(com.i, "DD/MM/YYYY");
+    					var end = moment(com.f, "DD/MM/YYYY");
+    					var range = moment().range(start, end);
+    					if (range.contains(d)) {
+    						console.log(t['_source'].nome_parlamentar);
+	        				console.log(t['_source'].comissoes[0]);
+	        			}
+    				}
+    			});
     	});
 	});
 }
@@ -42,7 +52,7 @@ var timeline = function(pl, data) {
 	  	c = tramite['data_ini'].split('/')
 	  	var current = new Date(Number(c[2]), Number(c[1]), Number(c[0]));
 	  	for (var i=0;i<tempo;i++) {
-	  		$("#"+pl+ " .timeline").append("<div data-time='"+current.valueOf()+"' class='dia "+tramite['unidade']+"'' title='"+tramite['unidade']+" - "+ tempo +" dias'></div>");
+	  		$("#"+pl+ " .timeline").append("<div data-time='"+current.valueOf()+"' data-comissao='"+tramite['unidade']+"' class='dia "+tramite['unidade']+"'' title='"+tramite['unidade']+" - "+ tempo +" dias'></div>");
 	  	current = new Date(current.setDate(current.getDate()+1));
 	  	}
 	  });
@@ -70,7 +80,8 @@ var render = function(q) {
 	    });
         $(".timeline .dia").click(function (e) {
 			var d = moment(Number(e.target.getAttribute('data-time')));
-        	cargos(d);
+			var com = e.target.getAttribute('data-comissao');
+        	cargos(d, com);
 	  	});
 	    $("#tempo").fadeIn("slow");
 	});
