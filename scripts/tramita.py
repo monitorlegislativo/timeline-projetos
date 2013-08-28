@@ -57,8 +57,9 @@ def projeta(encerramentos, ementas, brutos):
 			tramite = {}
 			try:
 				tramite["data_ini"] = b[4]
-				tramite["data_fim"] = b[5].strip()
-				tramite["tempo"] = (datetime.strptime(b[5].strip(), "%d/%m/%Y") - datetime.strptime(b[4], "%d/%m/%Y")).days
+				if len(b[5]) > 4: #bogus!
+					tramite["data_fim"] = b[5].strip()
+					tramite["tempo"] = (datetime.strptime(b[5].strip(), "%d/%m/%Y") - datetime.strptime(b[4], "%d/%m/%Y")).days
 			except:
 				pass
 			tramite["unidade"] = b[3]
@@ -127,4 +128,4 @@ encerramentos = encerra()
 brutos = arquivo_bruto()
 projetos = projeta(encerramentos, ementas, brutos)
 
-#upa_neguim(projetos)
+upa_neguim(projetos)
