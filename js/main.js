@@ -1,7 +1,10 @@
 //var my = new ES('http://127.0.0.1:9200', '');
 var q = {}
 
-var cargos = function(d, comissao) {
+var cargos = function(e) {
+	var d = moment(Number(e.target.getAttribute('data-time')));
+	var comissao = e.target.getAttribute('data-comissao');
+
 	var lq = {
       "query" : {
       	"nested" : {
@@ -30,19 +33,27 @@ var cargos = function(d, comissao) {
     var query = SETTINGS['SERVER'] + 'vereadores/_search?source=' + JSON.stringify(lq);
     
     $.getJSON(query, function (data) {
+    	var membros = $("<div/>")
+    	membros.append("<b>"+SETTINGS['MAPPING'][comissao]+" ("+d.format("DD/MM/YYYY")+") </b>");
     	$.each(data.hits.hits, function (index, t) {
     			$.each(t['_source'].comissoes, function (index, com) {
-    				if (com.n == SETTINGS['MAPPING'][comissao]) {
-    					var start = moment(com.i, "DD/MM/YYYY");
-    					var end = moment(com.f, "DD/MM/YYYY");
-    					var range = moment().range(start, end);
-    					if (range.contains(d)) {
-    						console.log(t['_source'].nome_parlamentar);
-	        				console.log(t['_source'].comissoes[0]);
-	        			}
+					var start = moment(com.i, "DD/MM/YYYY");
+					var end = moment(com.f, "DD/MM/YYYY");
+					var range = moment().range(start, end);
+    				if (com.n == SETTINGS['MAPPING'][comissao] && range.contains(d)) {
+						var nome = t['_source'].nome_parlamentar[0]
+						if (nome == '') {
+							nome = t['_source'].nome
+						}
+						membros.append('<p>' + nome + ' - ' + com.c + '</p>');
     				}
     			});
     	});
+    	if (membros.children().length > 0) {
+    		var id = $(e.target).parent().parent()[0].id;
+    		$("#"+id+ " .comissao" ).empty();
+    		$("#"+id+ " .comissao" ).append(membros);
+    	}
 	});
 }
 
@@ -79,9 +90,7 @@ var render = function(q) {
 	        timeline(t['_source']['id'], t['_source']['tramite']);
 	    });
         $(".timeline .dia").click(function (e) {
-			var d = moment(Number(e.target.getAttribute('data-time')));
-			var com = e.target.getAttribute('data-comissao');
-        	cargos(d, com);
+        	cargos(e);
 	  	});
 	    $("#tempo").fadeIn("slow");
 	});
